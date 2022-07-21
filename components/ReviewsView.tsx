@@ -1,23 +1,50 @@
 
-import { find, findByProps } from 'ittai/webpack'
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
+import { getReviews } from '../Utils/ReviewDBAPI';
 import ReviewComponent from "./ReviewComponent";
 
-
 type ReviewsViewProps = {
-    reviews: Array<any>
+    userid: number
 }
 
+interface IState {
+    reviews: any[];
+}
 
-export default class ReviewsView extends Component<ReviewsViewProps> {
+export const Queue = {
+    last: Promise.resolve(),
+    push(func:any) {
+        return (this.last = this.last.then(func));
+    }
+};
+
+export default class ReviewsView extends Component<any,IState> {
+
+    constructor(props: any) {
+        super(props)
+        this.state = {
+            reviews : []
+        }
+    }
+    
     render() {
+        
+        const reviews = this.state.reviews
+
+        if (reviews.length === 0) { 
+            getReviews(this.props.userid).then(reviews => {
+                console.log(reviews)
+                this.setState({ reviews: reviews });
+            })
+        }
+
         return (
             <div>
-               {
-                    this.props.reviews.map(review => {
-                        return <ReviewComponent username={review["username"]} comment={review["comment"]} discordid={12}></ReviewComponent>
-                    })
-               }
+                {
+                        (reviews.length !== 0) ? (reviews.map(review => {
+                            return <ReviewComponent review={review} />
+                        })) : (<div>Loading...</div>)
+                }
             </div>
         )
     }
