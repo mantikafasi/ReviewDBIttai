@@ -15,11 +15,6 @@ export default class ReviewDB extends Plugin {
         this.setSettingsPanel(() => React.createElement(ExampleSettingsPage));
 
         var popout = findAll(m => m.default?.displayName === "UserPopoutBody").filter(m => m.default?.toString().includes("ROLES_LIST"))[0]
-        var TabBar = findByDisplayName("TabBar",false)
-
-        patcher.after("Tabbar",TabBar,"default",([...args],res)=>{
-            console.log(args)
-        })
 
         patcher.after("patchepic", popout, "default", ([{ user }], res) => {
 
