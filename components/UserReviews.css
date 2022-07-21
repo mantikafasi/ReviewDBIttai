@@ -1,0 +1,21 @@
+.project-widget-header {
+    
+    display: flex;
+    flex-direction: row;
+    padding: 1.5em, 1.5em;
+    justify-content: center;
+    align-items: center;
+}
+
+.project-widget-icon {
+    border-radius: 50%;
+    height: 3.5em;
+    width: 3.5em;
+    margin-right: 1em;
+}
+
+.project-widget-title {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}

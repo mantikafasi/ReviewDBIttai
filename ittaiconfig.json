@@ -1,0 +1,12 @@
+{
+    "manifest": {
+        "name": "ReviewDB",
+        "version": "1.0.0",
+        "license": "MIT",
+        "source": "https://github.com/mantikafasi/ReviewDBIttai",
+        "updateUrl": "https://github.com/mantikafasi/ReviewDBIttai///",
+        "main": "index.js",
+        "author": "mantikafasi",
+        "description": "bruh"
+    }
+}

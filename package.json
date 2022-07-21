@@ -1,0 +1,20 @@
+{
+  "name": "reviewdb",
+  "version": "1.0.0",
+  "description": "A plugin that lets you comment other peoples and servers ",
+  "main": "index.js",
+  "scripts": {
+    "build": "ittai --plugin=\"./\" --betterdiscord=C:\\Users\\manti\\AppData\\Roaming\\BetterDiscord\\plugins --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@git.catvibers.me:Ittai/example-plugin.git"
+  },
+  "author": "",
+  "license": "CC0-1.0",
+  "dependencies": {
+    "@ittai/builder": "^1.2.6",
+    "@types/react": "^18.0.6",
+    "ittai": "^2.0.0"
+  }
+}
