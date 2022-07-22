@@ -3,12 +3,10 @@ lockfileVersion: 5.4
 specifiers:
   '@ittai/builder': ^1.2.6
   '@types/react': ^18.0.6
-  ittai: ^2.0.0
 
 dependencies:
   '@ittai/builder': 1.2.6
   '@types/react': 18.0.6
-  ittai: 2.0.0
 
 packages:
 
@@ -1292,10 +1290,6 @@ packages:
 
   /is-what/3.14.1:
     resolution: {integrity: sha512-sNxgpk9793nzSs7bA6JQJGeIuRBQhAaNGG77kzYQgMkrID+lS6SlK07K5LaptscDlSaIgH+GPFzf+d75FVxozA==}
-    dev: false
-
-  /ittai/2.0.0:
-    resolution: {integrity: sha512-7m+yh+bEqwvBws5zIYnMDUcf9vM6pFRKe5YiKxBh9wKoqSIEANgCogFlxBfaMf7TAhMat/ZEp/UuKh9VJXr76w==}
     dev: false
 
   /jest-worker/27.5.1:

@@ -26,24 +26,27 @@ export default class ReviewsView extends Component<any,IState> {
             reviews : []
         }
     }
-    
-    render() {
-        
-        const reviews = this.state.reviews
 
+    componentDidMount(): void {
+        const reviews = this.state.reviews
+        
         if (reviews.length === 0) { 
             getReviews(this.props.userid).then(reviews => {
                 console.log(reviews)
                 this.setState({ reviews: reviews });
             })
         }
+    }   
+
+    render() {
+        const reviews = this.state.reviews
 
         return (
             <div>
                 {
-                        (reviews.length !== 0) ? (reviews.map(review => {
-                            return <ReviewComponent review={review} />
-                        })) : (<div>Loading...</div>)
+                    (reviews.length !== 0) ? (reviews.map(review => {
+                        return <ReviewComponent review={review} />
+                    })) : (<div>Loading...</div>)
                 }
             </div>
         )

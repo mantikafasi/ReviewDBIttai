@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Spinner, Switch } from "ittai/components";
 import * as settings from "ittai/settings"
 
-export default function ExampleSettingsPage(): JSX.Element {
+export default function ReviewDBSettings(): JSX.Element {
     const [switchValue, setSwitchValue] = useState(settings.get("funnySetting", false))
     return (<>
         {"Hello!"}

@@ -31,7 +31,13 @@ export default class ReviewComponent extends Component<any, IState> {
   render() {
     const review: Review = this.props.review
     if (this.state.profilePhoto === "") {
-      Queue.push(() => getUser(review.senderdiscordid).then((u:any) => this.setState({ profilePhoto: getUserAvatarURL(u) })))
+      var user = stores.Users.getUser(review.senderdiscordid)
+      if (user === undefined) {
+        Queue.push(() => getUser(review.senderdiscordid).then((u:any) => this.setState({ profilePhoto: getUserAvatarURL(u) })))
+      } else {
+        this.setState({ profilePhoto: getUserAvatarURL(user) })
+      }
+
     }
 
     return (
