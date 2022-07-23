@@ -42,7 +42,6 @@ export default class ReviewsView extends Component<any,IState> {
     }   
 
     onKeyPress(keyEvent:any) {
-        console.log(keyEvent)
         if (keyEvent.key === "Enter") {
             addReview({
                 "userid": this.props.userid,

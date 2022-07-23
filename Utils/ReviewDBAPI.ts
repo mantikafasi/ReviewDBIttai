@@ -36,15 +36,23 @@ export const addReview = async (review : any): Promise<number> => {
     )
 }
 
-export const deleteReview = async ()=>{
-
+export const deleteReview = async (reviewid:string) : Promise<any>=>{
+    var data:any = {
+        "token":settings.get("token",""),
+        "reviewid":reviewid
+    }
+    return await fetch(API_URL + "/deleteReview", {method:"POST",body:JSON.stringify(data)}).then(r =>r.json())
 }
 
-export const reportReview = async ()=>{
-
+export const reportReview = (reviewID:string)=>{
+    var data:any = {
+        "reviewid":reviewID,
+        "token":settings.get("token","")
+    }
+    fetch(API_URL + "reportReview", {method:"POST",body:JSON.stringify(data)}).then(r =>{r.text();toast.show(GenericToast({"children":r.text()}))})
 }
 
-export const getLastReviewID = async ()=>{
-
+export const getLastReviewID = async (userid:string): Promise<number>=>{
+    return await fetch(API_URL + "/getLastReviewID?discordid=" + userid).then(r => Number.parseInt(r.text()))
 }
 
