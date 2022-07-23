@@ -4,11 +4,11 @@ import { findByProps } from 'ittai/webpack';
 import React, { Component, useState } from 'react'
 import { addReview, getReviews } from '../Utils/ReviewDBAPI';
 import ReviewComponent from "./ReviewComponent";
-const { Editable } = findByProps("Editable")
+import { Review } from "../entities/Review";
+const {withReact, Slate,DefaultEditable } = findByProps("Editable")
 type ReviewsViewProps = {
     userid: number
 }
-
 interface IState {
     reviews: any[];
 }
@@ -26,21 +26,36 @@ export default class ReviewsView extends Component<any,IState> {
             reviews : []
         }
     }
+    fetchReviews = () => {
+        getReviews(this.props.userid).then(reviews => {
+            console.log(reviews)
+            this.setState({ reviews: reviews });
+        })
+    }
 
     componentDidMount(): void {
         const reviews = this.state.reviews
         
         if (reviews.length === 0) { 
-            getReviews(this.props.userid).then(reviews => {
-                console.log(reviews)
-                this.setState({ reviews: reviews });
-            })
+            this.fetchReviews()
         }
     }   
 
-    onClick(...args:any) {
-        console.log("clicked")
-        console.log(args)
+    onKeyPress(keyEvent:any) {
+        console.log(keyEvent)
+        if (keyEvent.key === "Enter") {
+            addReview({
+                "userid": this.props.userid,
+                "comment":keyEvent.target.value,
+                "star":-1
+            }).then(response => {
+                if (response === 0 || response === 1 ) {
+                    keyEvent.target.value = "" // clear the input
+                    this.fetchReviews()
+                }
+            })
+        }
+
     }
 
     render() {
@@ -54,7 +69,7 @@ export default class ReviewsView extends Component<any,IState> {
                     })) : (<div>Loading...</div>)
                 }
                 
-                <Editable placeholder='Enter a comment' onChange={this.onClick}></Editable>
+                <TextInput key={"ReviewDBTextInput"} placeholder='Enter a comment' onKeyPress ={(e)=>this.onKeyPress(e)}></TextInput>                
             </div>
         )
     }

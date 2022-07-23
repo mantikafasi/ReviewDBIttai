@@ -10,17 +10,41 @@ export const getReviews = async (discorid : number): Promise<Review[]> => {
     return await res.json() as Review[]
 }
 
-export const addReview = async (review : Review): Promise<void> => {
+export const addReview = async (review : any): Promise<number> => {
     var token = settings.get("token","")
     if (token === "") {
         authorize();
         toast.show(GenericToast({"children":"Please authorize to add a review."}))
-        return
+        return 2
     }
+    review["token"] = token
 
-    var data :any = {"token":token,"star":-1,"comment":review.comment}
-
-    fetch(API_URL + "/addReview", data).then(
-        res => {toast.show(GenericToast({"children":res.text()}))}
+    return await fetch(API_URL + "/addUserReview", {method:"POST",body:JSON.stringify(review)}).then(r =>r.text()).then(
+        res => {
+            toast.show(GenericToast({"children":res}))
+            var responseCode = 0 
+            // 0 means added ,1 means edited, 2 means error
+            if (res === "Added your review") {
+                responseCode = 0 
+            } else if (res === "Updated your review") {
+                responseCode = 1
+            } else {
+                responseCode = 2
+            }
+            return responseCode
+        }
     )
 }
+
+export const deleteReview = async ()=>{
+
+}
+
+export const reportReview = async ()=>{
+
+}
+
+export const getLastReviewID = async ()=>{
+
+}
+
