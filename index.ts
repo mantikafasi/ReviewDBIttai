@@ -2,17 +2,15 @@ import { Plugin } from "ittai/entities";
 import * as React from "react";
 import ReviewDBSettings from "./components/Settings";
 import { findAll, findAllByDisplayName, findByDisplayName, findByProps, ModalActions } from "ittai/webpack";
-import { patcher, stores } from "ittai";
+import { patcher, stores, toast } from "ittai";
 const { fetchProfile } = findByProps("fetchProfile");
 import ReviewsView from "./components/ReviewsView";
 import { openChangelogModal } from "ittai/changelog";
 const getOnClick = findByProps("getOnClick","openURL")
 
-
 export default class ReviewDB extends Plugin {
 
     start() {
-        
         console.log("ReviewDB Started");
         
         this.setSettingsPanel(() => React.createElement(ReviewDBSettings));
@@ -30,3 +28,4 @@ export default class ReviewDB extends Plugin {
         console.log("Stopping Plugin");
     }
 }
+
