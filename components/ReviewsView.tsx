@@ -68,7 +68,7 @@ export default class ReviewsView extends Component<any,IState> {
                     })) : (<div>Loading...</div>)
                 }
                 
-                <TextInput key={"ReviewDBTextInput"} placeholder='Enter a comment' onKeyPress ={(e)=>this.onKeyPress(e)}></TextInput>                
+                <TextInput placeholder='Enter a comment' onKeyPress ={(e)=>this.onKeyPress(e)}></TextInput>                
             </div>
         )
     }

@@ -15,6 +15,7 @@ const cozy = findByProps("cozy", "zalgo").cozy
 const { contents } = findByProps("contents")
 const { getUserAvatarURL } = findByProps("getUserAvatarURL")
 const { getUser } = findByProps("getUser")
+const { openUserProfileModal } = findByProps("openUserProfileModal")
 
 interface IState {
   profilePhoto: string
@@ -26,6 +27,9 @@ export default class ReviewComponent extends Component<any, IState> {
     this.state = {
       profilePhoto: ""
     }
+  }
+  openModal = ()=>{
+      openUserProfileModal({"userId":this.props.review.senderdiscordid})
   }
 
   render() {
@@ -44,10 +48,10 @@ export default class ReviewComponent extends Component<any, IState> {
       <div>
         <div className={cozyMessage + " " + message + " " + groupStart + " " + wrapper + " " + cozy}>
           <div className={contents}>
-            <img className={avatar} src={this.state.profilePhoto === "" ? "https://github.com/Aliucord.png?size=80" : this.state.profilePhoto}></img>
+            <img className={avatar} onClick={()=>{this.openModal()}} src={this.state.profilePhoto === "" ? "https://github.com/Aliucord.png?size=80" : this.state.profilePhoto}></img>
 
 
-            <h2 className={username}>{review.username}</h2>
+            <h2 className={username} onClick={()=>this.openModal()}>{review.username}</h2>
             <p className={messageContent}>{review.comment}</p>
           </div>
         </div>
