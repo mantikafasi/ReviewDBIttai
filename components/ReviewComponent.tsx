@@ -80,8 +80,8 @@ export default class ReviewComponent extends Component<any, IState> {
           <div className={contents}>
             <img className={avatar + " " + clickable} onClick={() => { this.openModal() }} src={this.state.profilePhoto === "" ? "/assets/1f0bfc0865d324c2587920a7d80c609b.png?size=80" : this.state.profilePhoto}></img>
 
-            <span className={username + " " + usernameClickable} style={{ color: "var(--text-muted)" }} onClick={() => this.openModal()}>{review.username}</span>
-            <p className={messageContent} style={{ fontSize: 15 }}>{review.comment}</p>
+            <span className={username + " " + usernameClickable} style={{ color: "var(--text-muted)"}} onClick={() => this.openModal()}>{review.username}</span>
+            <p className={messageContent} style={{ fontSize: 15 ,marginTop:4 }}>{review.comment}</p>
             <div className={container + " " + isHeader + " " + buttons}>
               <div className={buttonClassNames.wrapper}>
                 <MessageButton type="report" callback={() => this.reportReview()}></MessageButton>
