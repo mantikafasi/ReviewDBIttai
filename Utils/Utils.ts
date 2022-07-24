@@ -30,6 +30,8 @@ export function authorize() {
             tempOpen(url);
         }
     }
+}
 
-
+export function showToast(text:string) {
+    toast.show(GenericToast({"children":text}));
 }

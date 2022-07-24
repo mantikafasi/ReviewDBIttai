@@ -1,7 +1,7 @@
 import { settings, toast } from "ittai"
 import GenericToast from "ittai/toast/ToastWrapper"
 import { Review } from "../entities/Review"
-import { authorize } from "./Utils"
+import { authorize, showToast } from "./Utils"
 
 const API_URL = "https://manti.vendicated.dev"
 
@@ -49,10 +49,10 @@ export const reportReview = (reviewID:string)=>{
         "reviewid":reviewID,
         "token":settings.get("token","")
     }
-    fetch(API_URL + "reportReview", {method:"POST",body:JSON.stringify(data)}).then(r =>{r.text();toast.show(GenericToast({"children":r.text()}))})
+    fetch(API_URL + "/reportReview", {method:"POST",body:JSON.stringify(data)}).then(r =>r.text()).then(res=>showToast(res))
 }
 
 export const getLastReviewID = async (userid:string): Promise<number>=>{
-    return await fetch(API_URL + "/getLastReviewID?discordid=" + userid).then(r => Number.parseInt(r.text()))
+    return await fetch(API_URL + "/getLastReviewID?discordid=" + userid).then(r => r.text()).then(r=> Number.parseInt(r))
 }
 

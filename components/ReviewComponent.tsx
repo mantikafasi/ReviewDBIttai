@@ -1,21 +1,29 @@
 import { stores } from 'ittai';
-import { findByProps } from 'ittai/webpack';
+import { findByDisplayName, findByProps, ModalActions } from 'ittai/webpack';
 import React, { Component } from 'react'
 import { Review } from '../entities/Review';
+import { deleteReview, reportReview } from '../Utils/ReviewDBAPI';
+import { showToast } from '../Utils/Utils';
+import MessageButton from './MessageButton';
 import { Queue } from './ReviewsView';
 
-const cozyMessage = findByProps("cozyMessage").cozyMessage
-const avatar = findByProps("avatar", "zalgo").avatar
-const username = findByProps("header", "zalgo").header
-const messageContent = findByProps("messageContent", "zalgo").messageContent
-const message = findByProps("message").message
-const groupStart = findByProps("groupStart").groupStart
-const wrapper = findByProps("wrapper", "zalgo").wrapper
-const cozy = findByProps("cozy", "zalgo").cozy
+const { cozyMessage, buttons } = findByProps("cozyMessage")
+const { container, isHeader } = findByProps("container", "isHeader")
+const { avatar, clickable } = findByProps("avatar", "zalgo")
+const { username } = findByProps("header", "zalgo")
+const { messageContent } = findByProps("messageContent", "zalgo")
+const { message } = findByProps("message")
+const { groupStart } = findByProps("groupStart")
+const { wrapper } = findByProps("wrapper", "zalgo")
+const { cozy } = findByProps("cozy", "zalgo")
 const { contents } = findByProps("contents")
 const { getUserAvatarURL } = findByProps("getUserAvatarURL")
 const { getUser } = findByProps("getUser")
 const { openUserProfileModal } = findByProps("openUserProfileModal")
+const buttonClassNames = findByProps("button", "wrapper", "disabled")
+const usernameClickable = findByProps("clickable", "username").clickable
+const ConfirmModal = findByDisplayName("ConfirmModal")
+const { markdown } = findByProps("markdown")
 
 interface IState {
   profilePhoto: string
@@ -28,8 +36,31 @@ export default class ReviewComponent extends Component<any, IState> {
       profilePhoto: ""
     }
   }
-  openModal = ()=>{
-      openUserProfileModal({"userId":this.props.review.senderdiscordid})
+  openModal = () => {
+    openUserProfileModal({ "userId": this.props.review.senderdiscordid })
+  }
+  modalProps: any = { "cancelText": "Nop", "confirmText": "Yop", "header": "ARE YOU SURE ABOUT THAT" }
+
+  deleteReview() {
+    this.modalProps["children"] = (<h2 className={markdown}>DELETE THAT REVIEWW????</h2>)
+    this.modalProps["onConfirm"] = () => {
+      deleteReview(this.props.review.id).then(res => {
+        if (res.successful) {
+          this.props.fetchReviews()
+        }
+        showToast(res.message)
+      })
+    }
+    ModalActions.openModal((prop) => (<ConfirmModal {...prop} {...this.modalProps}></ConfirmModal>))
+  }
+
+  reportReview() {
+    this.modalProps["children"] = (<h2 className={markdown}>REPORT THAT REVIEWW????</h2>)
+    this.modalProps["onConfirm"] = () => {
+      reportReview(this.props.review.id)
+    }
+    ModalActions.openModal((prop) => (<ConfirmModal {...prop} {...this.modalProps}></ConfirmModal>))
+
   }
 
   render() {
@@ -37,22 +68,26 @@ export default class ReviewComponent extends Component<any, IState> {
     if (this.state.profilePhoto === "") {
       var user = stores.Users.getUser(review.senderdiscordid)
       if (user === undefined) {
-        Queue.push(() => getUser(review.senderdiscordid).then((u:any) => this.setState({ profilePhoto: getUserAvatarURL(u) })))
+        Queue.push(() => getUser(review.senderdiscordid).then((u: any) => this.setState({ profilePhoto: getUserAvatarURL(u) })))
       } else {
         this.setState({ profilePhoto: getUserAvatarURL(user) })
       }
-
     }
 
     return (
       <div>
         <div className={cozyMessage + " " + message + " " + groupStart + " " + wrapper + " " + cozy}>
           <div className={contents}>
-            <img className={avatar} onClick={()=>{this.openModal()}} src={this.state.profilePhoto === "" ? "https://github.com/Aliucord.png?size=80" : this.state.profilePhoto}></img>
+            <img className={avatar + " " + clickable} onClick={() => { this.openModal() }} src={this.state.profilePhoto === "" ? "/assets/1f0bfc0865d324c2587920a7d80c609b.png?size=80" : this.state.profilePhoto}></img>
 
-
-            <h2 className={username} onClick={()=>this.openModal()}>{review.username}</h2>
-            <p className={messageContent}>{review.comment}</p>
+            <span className={username + " " + usernameClickable} style={{ color: "var(--text-muted)" }} onClick={() => this.openModal()}>{review.username}</span>
+            <p className={messageContent} style={{ fontSize: 15 }}>{review.comment}</p>
+            <div className={container + " " + isHeader + " " + buttons}>
+              <div className={buttonClassNames.wrapper}>
+                <MessageButton type="report" callback={() => this.reportReview()}></MessageButton>
+                {(review.senderdiscordid === stores.Users.getCurrentUser().id) ? (<MessageButton type="delete" callback={() => this.deleteReview()}></MessageButton>) : <></>}
+              </div>
+            </div>
           </div>
         </div>
       </div>
