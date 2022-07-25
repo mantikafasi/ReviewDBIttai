@@ -5,7 +5,7 @@ import GenericToast from "ittai/toast/ToastWrapper";
 const openOAuth2Modal = findByProps("openOAuth2Modal"); 
 
 
-export function authorize() {
+export function authorize(callback?:any) {
     
     var props = openOAuth2Modal.getOAuth2AuthorizeProps("https://discord.com/api/oauth2/authorize?client_id=915703782174752809&redirect_uri=https%3A%2F%2Fmanti.vendicated.dev%2FURauth&response_type=code&scope=identify")
     openOAuth2Modal.openOAuth2Modal(props,() => {
@@ -19,11 +19,11 @@ export function authorize() {
             fetch(url + "&returnType=json").then(res => {res.json().then(res => {
                 if (res.status === 0) {
                     settings.set("token", res.token);
-                    toast.show(GenericToast({"children":"Successfully authorized!"}));
-
+                    showToast("Successfully authorized!")
+                    callback?.()
                 } else if (res.status === 1) {
-                    toast.show(GenericToast({"children":"An Error Occured while authorizing."}));
-                }                
+                    showToast("An Error Occured while authorizing.")
+                }
             })})
             window.open = tempOpen;
         } else {
