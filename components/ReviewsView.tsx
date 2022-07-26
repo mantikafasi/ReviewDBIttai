@@ -27,7 +27,6 @@ export default class ReviewsView extends Component<any, IState> {
     }
     fetchReviews = () => {
         getReviews(this.props.userid).then(reviews => {
-            console.log(reviews)
             this.setState({ reviews: reviews });
         })
     }

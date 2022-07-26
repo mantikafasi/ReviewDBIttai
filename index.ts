@@ -12,13 +12,13 @@ export default class ReviewDB extends Plugin {
     start() {
         console.log("ReviewDB Started");
 
-        getLastReviewID(stores.Users.getCurrentUser().id).then(lastreviewid=>{
-            const storedLastReviewID:number = settings.get("lastreviewid",0) 
-            if (settings.get("notifyReviews",true) && storedLastReviewID < lastreviewid) {
-                if (storedLastReviewID != 0 ) {
+        getLastReviewID(stores.Users.getCurrentUser().id).then(lastreviewid => {
+            const storedLastReviewID: number = settings.get("lastreviewid", 0)
+            if (settings.get("notifyReviews", true) && storedLastReviewID < lastreviewid) {
+                if (storedLastReviewID != 0) {
                     showToast("You have new reviews on your profile")
                 }
-                settings.set("lastreviewid",lastreviewid)
+                settings.set("lastreviewid", lastreviewid)
             }
         })
 
@@ -26,14 +26,12 @@ export default class ReviewDB extends Plugin {
 
         var popout = findAll(m => m.default?.displayName === "UserPopoutBody").filter(m => m.default?.toString().includes("ROLES_LIST"))[0]
 
-        patcher.after("patchepic", popout, "default", ([{ user }], res) => {
-            res.props.children.splice(res.props.children.length, 0, React.createElement(ReviewsView, { userid : user.id }))
+        patcher.after("UserPopoutPatch", popout, "default", ([{ user }], res) => {
+            res.props.children.splice(res.props.children.length, 0, React.createElement(ReviewsView, { userid: user.id }))
         })
-
     }
 
     stop() {
-    
         console.log("Stopping ReviewsDB");
     }
 }

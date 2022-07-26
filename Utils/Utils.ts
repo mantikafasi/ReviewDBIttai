@@ -1,7 +1,6 @@
 import { settings, toast } from "ittai";
 import { findByProps } from "ittai/webpack";
 import GenericToast from "ittai/toast/ToastWrapper";
-
 const openOAuth2Modal = findByProps("openOAuth2Modal"); 
 
 
@@ -35,3 +34,5 @@ export function authorize(callback?:any) {
 export function showToast(text:string) {
     toast.show(GenericToast({"children":text}));
 }
+
+export const sleep = (ms:number) => new Promise(r => setTimeout(r, ms));

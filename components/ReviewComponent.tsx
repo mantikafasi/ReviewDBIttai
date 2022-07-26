@@ -3,7 +3,7 @@ import { findByDisplayName, findByProps, ModalActions } from 'ittai/webpack';
 import React, { Component } from 'react'
 import { Review } from '../entities/Review';
 import { deleteReview, reportReview } from '../Utils/ReviewDBAPI';
-import { showToast } from '../Utils/Utils';
+import { showToast, sleep } from '../Utils/Utils';
 import MessageButton from './MessageButton';
 import { Queue } from './ReviewsView';
 
@@ -68,7 +68,7 @@ export default class ReviewComponent extends Component<any, IState> {
     if (this.state.profilePhoto === "") {
       var user = stores.Users.getUser(review.senderdiscordid)
       if (user === undefined) {
-        Queue.push(() => getUser(review.senderdiscordid).then((u: any) => this.setState({ profilePhoto: getUserAvatarURL(u) })))
+        Queue.push(() => getUser(review.senderdiscordid).then((u: any) => this.setState({ profilePhoto: getUserAvatarURL(u) })).then((m:any)=>sleep(400)))
       } else {
         this.setState({ profilePhoto: getUserAvatarURL(user) })
       }
