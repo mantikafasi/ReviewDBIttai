@@ -5,5 +5,5 @@ export type Review = {
     senderuserid : number,
     star : number,
     username : string,
-    
+    profile_photo:string
 }

@@ -65,11 +65,14 @@ export default class ReviewComponent extends Component<any, IState> {
   componentDidMount(): void {
     const review: Review = this.props.review
 
-    var user = stores.Users.getUser(review.senderdiscordid)
-    if (user === undefined) {
-      Queue.push(() => getUser(review.senderdiscordid).then((u: any) => this.setState({ profilePhoto: getUserAvatarURL(u) })).then((m:any)=>sleep(400)))
-    } else {
-      this.setState({ profilePhoto: getUserAvatarURL(user) })
+    if (!review.profile_photo || review.profile_photo === "") {
+      var user = stores.Users.getUser(review.senderdiscordid)
+      if (user === undefined) {
+        Queue.push(() => getUser(review.senderdiscordid).then((u: any) => this.setState({})).then((m: any) => sleep(400)))
+      } else {
+        review.profile_photo = getUserAvatarURL(user)
+        this.setState({})
+      }
     }
   }
 
@@ -80,9 +83,9 @@ export default class ReviewComponent extends Component<any, IState> {
       <div>
         <div className={cozyMessage + " " + message + " " + groupStart + " " + wrapper + " " + cozy}>
           <div className={contents}>
-            <img className={avatar + " " + clickable} onClick={() => { this.openModal() }} src={this.state.profilePhoto === "" ? "/assets/1f0bfc0865d324c2587920a7d80c609b.png?size=80" : this.state.profilePhoto}></img>
-            <span className={username + " " + usernameClickable} style={{ color: "var(--text-muted)"}} onClick={() => this.openModal()}>{review.username}</span>
-            <p className={messageContent} style={{ fontSize: 15 ,marginTop:4}}>{review.comment}</p>
+            <img className={avatar + " " + clickable} onClick={() => { this.openModal() }} src={review.profile_photo === "" ? "/assets/1f0bfc0865d324c2587920a7d80c609b.png?size=128" : review.profile_photo}></img>
+            <span className={username + " " + usernameClickable} style={{ color: "var(--text-muted)" }} onClick={() => this.openModal()}>{review.username}</span>
+            <p className={messageContent} style={{ fontSize: 15, marginTop: 4 }}>{review.comment}</p>
             <div className={container + " " + isHeader + " " + buttons}>
               <div className={buttonClassNames.wrapper}>
                 <MessageButton type="report" callback={() => this.reportReview()}></MessageButton>
