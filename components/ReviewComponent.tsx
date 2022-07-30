@@ -62,17 +62,19 @@ export default class ReviewComponent extends Component<any, IState> {
     ModalActions.openModal((prop) => (<ConfirmModal {...prop} {...this.modalProps}></ConfirmModal>))
 
   }
+  componentDidMount(): void {
+    const review: Review = this.props.review
+
+    var user = stores.Users.getUser(review.senderdiscordid)
+    if (user === undefined) {
+      Queue.push(() => getUser(review.senderdiscordid).then((u: any) => this.setState({ profilePhoto: getUserAvatarURL(u) })).then((m:any)=>sleep(400)))
+    } else {
+      this.setState({ profilePhoto: getUserAvatarURL(user) })
+    }
+  }
 
   render() {
     const review: Review = this.props.review
-    if (this.state.profilePhoto === "") {
-      var user = stores.Users.getUser(review.senderdiscordid)
-      if (user === undefined) {
-        Queue.push(() => getUser(review.senderdiscordid).then((u: any) => this.setState({ profilePhoto: getUserAvatarURL(u) })).then((m:any)=>sleep(400)))
-      } else {
-        this.setState({ profilePhoto: getUserAvatarURL(user) })
-      }
-    }
 
     return (
       <div>
