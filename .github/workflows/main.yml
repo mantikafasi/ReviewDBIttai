@@ -10,11 +10,10 @@ jobs:
           path: ./src
 
       - name: Build
-        continue-on-error: true
         uses: docker://registry.catvibers.me/ittai/builder
         with:
           entrypoint: sh
-          args: -c "cd src && pnpm i && ittai --plugin="./" --betterdiscord --powercordv2 --goosemod --production --output=../ && rm -rf ./node_modules ./.swc"
+          args: -c "cd src && pnpm i && ittai --plugin="./" --betterdiscord="../" --powercordv2="../" --goosemod="../" --production && rm -rf ./node_modules ./.swc"
           # rm is a hack to make github actions permissions function
 
       - name: Prepare to push
