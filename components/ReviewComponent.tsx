@@ -62,17 +62,24 @@ export default class ReviewComponent extends Component<any, IState> {
     ModalActions.openModal((prop) => (<ConfirmModal {...prop} {...this.modalProps}></ConfirmModal>))
 
   }
+
+  fetchUser(){
+    const review: Review = this.props.review
+
+    var user = stores.Users.getUser(review.senderdiscordid)
+    if (user === undefined) {
+      Queue.push(() => getUser(review.senderdiscordid).then((u: any) => {this.setState({});review.profile_photo = getUserAvatarURL(u)}).then((m: any) => sleep(400)))
+    } else {
+      review.profile_photo = getUserAvatarURL(user)
+      this.setState({})
+    }
+  }
+
   componentDidMount(): void {
     const review: Review = this.props.review
 
     if (!review.profile_photo || review.profile_photo === "") {
-      var user = stores.Users.getUser(review.senderdiscordid)
-      if (user === undefined) {
-        Queue.push(() => getUser(review.senderdiscordid).then((u: any) => {this.setState({});review.profile_photo = getUserAvatarURL(u)}).then((m: any) => sleep(400)))
-      } else {
-        review.profile_photo = getUserAvatarURL(user)
-        this.setState({})
-      }
+        this.fetchUser();
     }
   }
 
@@ -83,7 +90,7 @@ export default class ReviewComponent extends Component<any, IState> {
       <div>
         <div className={cozyMessage + " " + message + " " + groupStart + " " + wrapper + " " + cozy}>
           <div className={contents}>
-            <img className={avatar + " " + clickable} onClick={() => { this.openModal() }} onError={()=>{ review.profile_photo="";this.componentDidMount() }} src={review.profile_photo === "" ? "/assets/1f0bfc0865d324c2587920a7d80c609b.png?size=128" : review.profile_photo}></img>
+            <img className={avatar + " " + clickable} onClick={() => { this.openModal() }} onError={()=>{ this.fetchUser() }} src={review.profile_photo === "" ? "/assets/1f0bfc0865d324c2587920a7d80c609b.png?size=128" : review.profile_photo}></img>
             <span className={username + " " + usernameClickable} style={{ color: "var(--text-muted)" }} onClick={() => this.openModal()}>{review.username}</span>
             <p className={messageContent} style={{ fontSize: 15, marginTop: 4 }}>{review.comment}</p>
             <div className={container + " " + isHeader + " " + buttons}>
