@@ -8,7 +8,6 @@ import { getLastReviewID } from "./Utils/ReviewDBAPI";
 import { showToast } from "./Utils/Utils";
 
 export default class ReviewDB extends Plugin {
-
     start() {
         console.log("ReviewDB Started");
 
@@ -32,6 +31,7 @@ export default class ReviewDB extends Plugin {
     }
 
     stop() {
+        patcher.unpatchAll("UserPopoutPatch");
         console.log("Stopping ReviewsDB");
     }
 }
