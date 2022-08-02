@@ -1,6 +1,7 @@
 import { settings, toast } from "ittai";
 import { findByProps } from "ittai/webpack";
 import GenericToast from "ittai/toast/ToastWrapper";
+import { getClientMod } from "ittai/utilities";
 const openOAuth2Modal = findByProps("openOAuth2Modal"); 
 
 
@@ -15,13 +16,14 @@ export function authorize(callback?:any) {
     var tempOpen = window.open;
     window.open = function (url?:string):void {
         if (url?.startsWith("https://manti.vendicated.dev")) {
-            fetch(url + "&returnType=json").then(res => {res.json().then(res => {
+            
+            fetch(url + "&returnType=json&clientMod=" + getClientMod()).then(res => {res.json().then(res => {
                 if (res.status === 0) {
                     settings.set("token", res.token);
-                    showToast("Successfully authorized!")
+                    showToast("Successfully logged in!")
                     callback?.()
                 } else if (res.status === 1) {
-                    showToast("An Error Occured while authorizing.")
+                    showToast("An Error Occured while logging in.")
                 }
             })})
             window.open = tempOpen;

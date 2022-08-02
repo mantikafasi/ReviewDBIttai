@@ -17,16 +17,16 @@ export default function ReviewDBSettings(): JSX.Element {
         }} >Notify New Reviews</SwitchItem>
 
         <Text style={{ marginBottom: 4, marginLeft: 2 }}>OAUTH2 Token</Text>
-        <TextInput style={{ marginBottom: 8 }} value={oauth2token} placeholder="Authorize to get token" onChange={(val) => {
+        <TextInput style={{ marginBottom: 8 }} value={oauth2token} placeholder="Login to get token" onChange={(val) => {
             settings.set("token", val)
             setOauth2token(val)
             return true;
         }} />
 
-        <Button onClick={() => authorize(() => setOauth2token(settings.get("token", "")))}>Authorize</Button>
+        <Button onClick={() => authorize(() => setOauth2token(settings.get("token", "")))}>Login</Button>
         <FormDivider style={{ marginTop: 12 }} />
 
-        <Text style={{ marginTop: 8, marginBottom: 4 }}>If Authorize Button is not working</Text>
+        <Text style={{ marginTop: 8, marginBottom: 4 }}>If Login Button is not working</Text>
         <Button onClick={() =>
             window.open("https://discord.com/api/oauth2/authorize?client_id=915703782174752809&redirect_uri=https%3A%2F%2Fmanti.vendicated.dev%2FURauth&response_type=code&scope=identify")
         }>Get OAUTH2 Token</Button>
