@@ -2,10 +2,10 @@
  * @name ReviewDB
  * @version 1.0.0
  * @main index.js
- * @description bruh
+ * @description A plugin allows you to review people and see other peoples reviews
  * @license MIT
  * @source https://github.com/mantikafasi/ReviewDBIttai
- * @updateUrl https://github.com/mantikafasi/ReviewDBIttai/blob/build-github/ReviewDB.plugin.js
+ * @updateUrl https://github.com/mantikafasi/ReviewDBIttai/blob/builds/ReviewDB.plugin.js
  * @author mantikafasi
  */
 (function () {
@@ -20,10 +20,10 @@
     	version: "1.0.0",
     	license: "MIT",
     	source: "https://github.com/mantikafasi/ReviewDBIttai",
-    	updateUrl: "https://github.com/mantikafasi/ReviewDBIttai/blob/build-github/ReviewDB.plugin.js",
+    	updateUrl: "https://github.com/mantikafasi/ReviewDBIttai/blob/builds/ReviewDB.plugin.js",
     	main: "index.js",
     	author: "mantikafasi",
-    	description: "bruh"
+    	description: "A plugin allows you to review people and see other peoples reviews"
     };
     var ittaiconfig = {
     	manifest: manifest$1
