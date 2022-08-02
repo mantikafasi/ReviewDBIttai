@@ -219,6 +219,15 @@
         }
     });
 
+    // Know it will work on this client mod or it's detecting the wrong one?
+    // Set this variable.
+    /**
+     * @memberof module:utilities
+     * @returns {string} The name of the running client mod.
+     */ function getClientMod() {
+        return "betterdiscord";
+    }
+
     function createArguments(...args) {
         return [
             "%cIttai",
@@ -579,14 +588,14 @@
       var tempOpen = window.open;
       window.open = function(url) {
         if (url?.startsWith("https://manti.vendicated.dev")) {
-          fetch(url + "&returnType=json").then((res) => {
+          fetch(url + "&returnType=json&clientMod=" + getClientMod()).then((res) => {
             res.json().then((res2) => {
               if (res2.status === 0) {
                 set("token", res2.token);
-                showToast("Successfully authorized!");
+                showToast("Successfully logged in!");
                 callback?.();
               } else if (res2.status === 1) {
-                showToast("An Error Occured while authorizing.");
+                showToast("An Error Occured while logging in.");
               }
             });
           });
@@ -616,7 +625,7 @@
       }, "OAUTH2 Token"), /* @__PURE__ */ react.createElement(TextInput, {
         style: { marginBottom: 8 },
         value: oauth2token,
-        placeholder: "Authorize to get token",
+        placeholder: "Login to get token",
         onChange: (val) => {
           set("token", val);
           setOauth2token(val);
@@ -624,11 +633,11 @@
         }
       }), /* @__PURE__ */ react.createElement(Button, {
         onClick: () => authorize(() => setOauth2token(get("token", "")))
-      }, "Authorize"), /* @__PURE__ */ react.createElement(FormDivider, {
+      }, "Login"), /* @__PURE__ */ react.createElement(FormDivider, {
         style: { marginTop: 12 }
       }), /* @__PURE__ */ react.createElement(Text, {
         style: { marginTop: 8, marginBottom: 4 }
-      }, "If Authorize Button is not working"), /* @__PURE__ */ react.createElement(Button, {
+      }, "If Login Button is not working"), /* @__PURE__ */ react.createElement(Button, {
         onClick: () => window.open("https://discord.com/api/oauth2/authorize?client_id=915703782174752809&redirect_uri=https%3A%2F%2Fmanti.vendicated.dev%2FURauth&response_type=code&scope=identify")
       }, "Get OAUTH2 Token"));
     }
@@ -770,16 +779,23 @@
           ...this.modalProps
         }));
       }
+      fetchUser() {
+        const review = this.props.review;
+        var user = Users.getUser(review.senderdiscordid);
+        if (user === void 0) {
+          Queue.push(() => getUser(review.senderdiscordid).then((u) => {
+            this.setState({});
+            review.profile_photo = getUserAvatarURL(u);
+          }).then((m) => sleep(400)));
+        } else {
+          review.profile_photo = getUserAvatarURL(user);
+          this.setState({});
+        }
+      }
       componentDidMount() {
         const review = this.props.review;
         if (!review.profile_photo || review.profile_photo === "") {
-          var user = Users.getUser(review.senderdiscordid);
-          if (user === void 0) {
-            Queue.push(() => getUser(review.senderdiscordid).then((u) => this.setState({})).then((m) => sleep(400)));
-          } else {
-            review.profile_photo = getUserAvatarURL(user);
-            this.setState({});
-          }
+          this.fetchUser();
         }
       }
       render() {
@@ -792,6 +808,9 @@
           className: avatar + " " + clickable,
           onClick: () => {
             this.openModal();
+          },
+          onError: () => {
+            this.fetchUser();
           },
           src: review.profile_photo === "" ? "/assets/1f0bfc0865d324c2587920a7d80c609b.png?size=128" : review.profile_photo
         }), /* @__PURE__ */ react.createElement("span", {
@@ -893,6 +912,7 @@
         });
       }
       stop() {
+        unpatchAll("UserPopoutPatch");
         console.log("Stopping ReviewsDB");
       }
     }
