@@ -37,7 +37,13 @@ export default class ReviewComponent extends Component<any, IState> {
     }
   }
   openModal = () => {
-    openUserProfileModal({ "userId": this.props.review.senderdiscordid })
+    if (stores.Users.getUser(this.props.review.senderdiscordid) === undefined) {
+      getUser(this.props.review.senderdiscordid).then(user => {
+        openUserProfileModal({ "userId": this.props.review.senderdiscordid })
+      })
+    } else {
+      openUserProfileModal({ "userId": this.props.review.senderdiscordid })
+    }
   }
   modalProps: any = { "cancelText": "Nop", "confirmText": "Yop", "header": "ARE YOU SURE ABOUT THAT" }
 
