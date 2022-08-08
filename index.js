@@ -22,7 +22,7 @@
     function find(filter) {
       {
         let isDefault = false;
-        const mod = clientWebpack.getModule((x) => x?.default && filter(x) && (isDefault = true), false) || clientWebpack.getModule(filter, false);
+        const mod = clientWebpack.getModule((x) => x && filter(x) || x?.default && filter(x.default) && (isDefault = true), false);
         return isDefault ? mod.default : mod;
       }
     }
@@ -775,7 +775,8 @@
         });
       }
       stop() {
-        unpatchAll(["UserPopoutPatch"]);
+        unpatchAll();
+        this.removeSettingsPanel();
         console.log("Stopping ReviewsDB");
       }
     }
