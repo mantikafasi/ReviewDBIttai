@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState } from "react";
-import { Button, Spinner, Switch, SwitchItem, Text, TextInput } from "ittai/components";
+import { Button, SwitchItem, Text, TextInput } from "ittai/components";
 import * as settings from "ittai/settings"
 import { authorize } from "../Utils/Utils";
 import { findByProps } from "ittai/webpack";

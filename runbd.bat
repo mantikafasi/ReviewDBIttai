@@ -1,0 +1,1 @@
+ittai --plugin="./" --betterdiscord=C:\Users\manti\AppData\Roaming\BetterDiscord\plugins --watch --production

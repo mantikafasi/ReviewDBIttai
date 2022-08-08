@@ -1,7 +1,5 @@
-import { openChangelogModal } from 'ittai/changelog'
-import { findByDisplayName, findByProps, ModalActions } from 'ittai/webpack'
+import { findByProps } from 'ittai/webpack'
 import React, { PureComponent } from 'react'
-import { deleteReview, reportReview } from '../Utils/ReviewDBAPI'
 const { button, dangerous } = findByProps("button", "wrapper", "disabled")
 
 export default class MessageButton extends PureComponent<any> {
